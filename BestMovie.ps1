@@ -27,14 +27,21 @@ write-output "#################################################"
 
 
 
+if ($numbertitle.Substring(0,1) -like 'a' -and $numbertitle.Substring(1,1) -like ' ')
+{
+    $numbertitle = $numbertitle.Substring(2)+"-a"
+}
+
 
 if ($numbertitle.Substring(0,3) -eq "the")
 {
+ write-output 'moved the the to the end'
     $numbertitle = $numbertitle.Substring(4)+" the"
 }
 
 $numbertitle = $numbertitle.Replace(" ","-")
 $numbertitle = $numbertitle.Replace("'","")
+
 
 $url = "https://the-numbers.com/movie/$numbertitle#tab=summary"
 

@@ -11,4 +11,10 @@ $movies = Get-Content C:\bin\movies.txt
 #the right way to do this would be pass the entire variable as an array to the bestmovie.ps1 script
 #but this is just as easy
 
-foreach ($movie in $movies) {.\bestmovie.ps1 $movie}
+Write-Output "Getting information for " $movies.Length " movies"
+
+foreach ($movie in $movies) {
+    .\bestmovie.ps1 $movie
+    Read-Host -Prompt "Press any key to continue"
+
+}

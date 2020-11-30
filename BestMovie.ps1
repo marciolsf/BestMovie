@@ -93,7 +93,7 @@ Get-Content $tempfile | Where-Object {$_ -like '*MPAA Rating*'}
 
 write-output "       "
 write-output "#################################################"
-write-output "############## Begin Bing Results ###############"
+write-output "############## Begin Bing Count Results ###############"
 write-output "#################################################"
 
 $search = "$bingtitle"
@@ -128,10 +128,58 @@ Write-Output $results
 
 
 
+write-output "       "
+write-output "#################################################"
+write-output "######### Begin Bing metascore Results ##########"
+write-output "#################################################"
+
+$search = "$bingtitle"
+
+$bingURL = "https://www.bing.com/search?q=$search+metascore"
+
+
+if ($WhatIf -eq $true){
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    write-output 'the Bing metascore search url is ' $bingURL
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+}
+
+
+
+$b = invoke-webrequest -uri $bingURL
+##$b.ParsedHtml.body.outerText
+
+$results = $b.ParsedHtml.body.outerText
+
+if ($WhatIf -eq $true){
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    write-output 'Raw results pre-filtering' $results
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+}
+
+write-output $results  |Out-File $tempfile ##Gross revenue
+
+##get gross revenue
+$results = Get-Content $tempfile | Where-Object {$_ -like '*%(*'} | Where-Object {$_ -notlike "*details*"} | Where-Object {$_ -notlike "*imdb*"} | Where-Object {$_ -notlike "*game*"}
+
+
+if ($WhatIf -eq $true){
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    write-output 'Raw results post-filtering' $results
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+}
+
+$results = $results.Substring(0,$results.IndexOf("%("))
+#$results = $results.Substring($results.IndexOf(" of "))
+
+Write-Output $results
+
+
+
 
 write-output "       "
 write-output "#################################################"
-write-output "########## Begin Pop Results #########"
+write-output "########## Begin FunkoPop Results #########"
 write-output "#################################################"
 
 

@@ -1,6 +1,13 @@
-$param1=$args[0]
+param([Parameter(Mandatory=$true)]$MovieName, $WhatIf=$false)
 
-$title = $param1
+$title = $MovieName
+
+if ($WhatIf -eq $true){
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    write-output 'the movie name is'    
+    write-output $MovieName
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+}
 
 write-output "       "
 write-output "###################################################################################################################################################"
@@ -35,23 +42,36 @@ if ($numbertitle.Substring(0,1) -like 'a' -and $numbertitle.Substring(1,1) -like
 
 if ($numbertitle.Substring(0,3) -eq "the")
 {
- write-output 'moved the the to the end'
-    $numbertitle = $numbertitle.Substring(4)+" the"
+     $numbertitle = $numbertitle.Substring(4)+" the"
 }
 
 $numbertitle = $numbertitle.Replace(" ","-")
 $numbertitle = $numbertitle.Replace("'","")
+$numbertitle = $numbertitle.Replace(".","")
+$numbertitle = $numbertitle.Replace("!","")
+$numbertitle = $numbertitle.Replace("&","")
 
 
 $url = "https://the-numbers.com/movie/$numbertitle#tab=summary"
 
-
+if ($WhatIf -eq $true){
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    write-output 'the movie url is ' $url    
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+}
 
 ##write-output $url
 $b = invoke-webrequest -uri $url
 ##$b.ParsedHtml.body.outerText
 
 $results = $b.ParsedHtml.body.outerText
+
+
+if ($WhatIf -eq $true){
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    write-output $results.Length
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+}
 
 write-output $results  |Out-File $tempfile ##Gross revenue
 
@@ -79,6 +99,16 @@ write-output "#################################################"
 $search = "$bingtitle"
 
 $bingURL = "https://www.bing.com/search?q=$search&first=2"
+
+
+if ($WhatIf -eq $true){
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+    write-output 'the Bing search url is ' $bingURL
+    Write-Output '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+}
+
+
+
 $b = invoke-webrequest -uri $bingURL
 ##$b.ParsedHtml.body.outerText
 

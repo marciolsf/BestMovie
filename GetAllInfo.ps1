@@ -15,6 +15,6 @@ Write-Output "Getting information for " $movies.Length " movies"
 
 foreach ($movie in $movies) {
     .\bestmovie.ps1 $movie
-    Read-Host -Prompt "Press any key to continue"
+    Read-Host -Prompt "Press any key to continue "
 
 }
